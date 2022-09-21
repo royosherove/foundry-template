@@ -11,6 +11,13 @@ import "./../src/Treasury.sol";
 contract TreasuryTest is Cheats, Test {
     event Joined(address indexed who, uint256 indexed contribution);
 
+    function test_receive_SendingFunds_updatesBalance() public {
+        Treasury t = new Treasury();
+
+        address(t).call{value: 0.1 ether}("");
+        
+        assertEq(address(t).balance, 0.1 ether);
+    }
     function test_joinTwice_RevertsSecondTime() public {
         Treasury t = new Treasury();
         t.join{value:0.1 ether}();
