@@ -11,6 +11,13 @@ import "./../src/Treasury.sol";
 contract TreasuryTest is Cheats, Test {
     event Joined(address indexed who, uint256 indexed contribution);
 
+    function test_joinTwice_RevertsSecondTime() public {
+        Treasury t = new Treasury();
+        t.join{value:0.1 ether}();
+
+        vm.expectRevert(Treasury.ErrorAlreadyJoined.selector);
+        t.join{value:0.1 ether}();
+    }
     function test_setMaxMembers_JoineAboveThreshod_reverts() public {
         Treasury t = new Treasury();
         t.setMaxMembers(2);
@@ -24,7 +31,7 @@ contract TreasuryTest is Cheats, Test {
         vm.prank(bob);
         t.join{ value: 0.1 ether }();
 
-        vm.expectRevert(Treasury.ClubIsFull.selector);
+        vm.expectRevert(Treasury.ErrorClubIsFull.selector);
         vm.prank(mike);
         t.join{ value: 0.1 ether }();
     }
