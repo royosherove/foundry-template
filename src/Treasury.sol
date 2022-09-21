@@ -5,7 +5,7 @@ pragma solidity ^0.8.9;
 // import "hardhat/console.sol";
 
 contract Treasury {
-    event Joined(address indexed who,uint256  contribution);
+    event Joined(address indexed who,uint256 indexed contribution);
     error NotPaid();
     
     mapping (address => bool) members  ;

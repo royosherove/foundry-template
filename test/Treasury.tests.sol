@@ -11,15 +11,18 @@ import "./../src/Treasury.sol";
 /// @dev See the "Writing Tests" section in the Foundry Book if this is your first time with Forge.
 /// https://book.getfoundry.sh/forge/writing-tests
 contract TreasuryTest is PRBTest, Cheats {
-    event Joined(address indexed who,uint256  contribution);
+    event Joined(address indexed who,uint256 indexed contribution);
 
-    function testExample() public {
+    function testExample(uint amount) public {
+        vm.assume(amount < 1000000000000 ether);
+        vm.assume(amount > 0.1 ether);
         Treasury t = new Treasury();
+        console.log(amount);
 
-        vm.expectEmit(true,false,false,false);
-        emit Joined(address(this),0.2 ether);
+        vm.expectEmit(true,true,false,true);
+        emit Joined(address(this),amount);
 
-        t.join{value:0.1 ether}();
+        t.join{value:amount}();
         
         assertTrue(t.isMember(address(this)));
     }
