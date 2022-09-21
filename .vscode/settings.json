@@ -3,5 +3,7 @@
         "activityBar.background": "#262F32",
         "titleBar.activeBackground": "#364246",
         "titleBar.activeForeground": "#FAFBFC"
-    }
+    },
+    "solidity.packageDefaultDependenciesContractsDirectory": "src",
+    "solidity.packageDefaultDependenciesDirectory": "lib"
 }
