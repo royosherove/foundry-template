@@ -13,8 +13,8 @@ import "./../src/Treasury.sol";
 contract TreasuryTest is PRBTest, Cheats {
     event Joined(address indexed who,uint256 indexed contribution);
 
-    function testExample(uint amount) public {
-        vm.assume(amount < 1000000000000 ether);
+    function testfuzz_join_emitsJoinedEvent(uint amount) public {
+        vm.assume(amount < 100 ether);
         vm.assume(amount > 0.1 ether);
         Treasury t = new Treasury();
         console.log(amount);
