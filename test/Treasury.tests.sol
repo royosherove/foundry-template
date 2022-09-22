@@ -6,10 +6,7 @@ import { Cheats } from "forge-std/Cheats.sol";
 import { console } from "forge-std/console.sol";
 import "./../src/Treasury.sol";
 
-/// @dev See the "Writing Tests" section in the Foundry Book if this is your first time with Forge.
-/// https://book.getfoundry.sh/forge/writing-tests
-contract TreasuryTest is Cheats, Test {
-    event Joined(address indexed who, uint256 indexed contribution);
+contract TreasuryTest is Test {
 
     function test_receive_SendingFunds_updatesBalance() public {
         Treasury t = new Treasury();
@@ -18,6 +15,8 @@ contract TreasuryTest is Cheats, Test {
         
         assertEq(address(t).balance, 0.1 ether);
     }
+
+    event Joined(address indexed who, uint256 indexed contribution);
     function test_joinTwice_RevertsSecondTime() public {
         Treasury t = new Treasury();
         t.join{value:0.1 ether}();
@@ -25,6 +24,23 @@ contract TreasuryTest is Cheats, Test {
         vm.expectRevert(Treasury.ErrorAlreadyJoined.selector);
         t.join{value:0.1 ether}();
     }
+
+    function test_join_withPaymentUnderThhreshold_Reverts() public {
+        Treasury t = new Treasury();
+
+
+        vm.expectRevert(Treasury.ErrorNotPaid.selector);
+        t.join{ value: 0.01 ether }();
+    }
+
+    function test_join_isMemberReturnsTrue() public {
+        Treasury t = new Treasury();
+
+        t.join{ value: 0.1 ether }();
+
+        assertTrue(t.isMember(address(this)));
+    }
+
     function test_setMaxMembers_JoineAboveThreshod_reverts() public {
         Treasury t = new Treasury();
         t.setMaxMembers(2);

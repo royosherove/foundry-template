@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-// Uncomment this line to use console.log
-// import "hardhat/console.sol";
-
 contract Treasury {
     event Joined(address indexed who,uint256 indexed contribution);
     error ErrorNotPaid();
@@ -12,6 +9,7 @@ contract Treasury {
     uint max = 10;
     uint count = 0;
     
+    receive() external payable { }
     mapping (address => bool) members  ;
 
     function setMaxMembers(uint _max) public {
@@ -36,5 +34,4 @@ contract Treasury {
        return members[_address];
     }
 
-    receive() external payable { }
 }
